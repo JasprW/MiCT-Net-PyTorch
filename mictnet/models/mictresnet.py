@@ -221,7 +221,7 @@ class MiCTResNet(nn.Module):
         out1 = self.relu(out1)
         out1 = self.maxpool2(out1)
 
-        x, depth = _to_4d_tensor(x, depth_stride=2)
+        x, depth = _to_4d_tensor(x, depth_stride=4)
         out2 = self.conv1(x)
         out2 = self.bn1(out2)
         out2 = self.relu(out2)
