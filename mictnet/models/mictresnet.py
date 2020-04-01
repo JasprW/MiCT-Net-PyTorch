@@ -168,7 +168,7 @@ class MiCTResNet(nn.Module):
                                      stride=2, padding=1)
 
         self.conv2 = nn.Conv3d(3, 64, kernel_size=(7, 7, 7),
-                               stride=(self.t_strides[0], 2, 2),
+                               stride=(2, 2, 2),
                                padding=0, bias=False)
         self.bn2 = nn.BatchNorm3d(64)
         self.maxpool2 = nn.MaxPool3d(kernel_size=3, stride=2, padding=1)
