@@ -12,7 +12,7 @@ __all__ = ['save_checkpoint', 'download', 'mkdir', 'check_sha1']
 
 def save_checkpoint(state, args, is_best, filename='checkpoint.pth.tar'):
     """Saves checkpoint to disk"""
-    directory = "output/%s/%s/%s/" % (args.dataset, args.model, args.checkname)
+    directory = "output/%s/%s/%s/" % (args.dataset, '2+1_' + args.model, args.checkname)
     if not os.path.exists(directory):
         os.makedirs(directory)
     filename = directory + filename
@@ -116,7 +116,7 @@ def mkdir(path):
 
 
 def create_logger(args, phase='train'):
-    output_dir = "output/%s/%s/%s/" % (args.dataset, args.model, args.checkname)
+    output_dir = "output/%s/%s/%s/" % (args.dataset, '2+1_'+args.model, args.checkname)
     print('=> creating {}'.format(output_dir))
     mkdir(output_dir)
 

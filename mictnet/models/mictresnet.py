@@ -184,7 +184,7 @@ class SpatioTemporalConv(nn.Module):
                                        stride=temporal_stride, padding=temporal_padding, bias=bias)
 
     def forward(self, x):
-        x = self.relu(self.bn(self.spatial_conv(x)))
+        x = self.bn(self.relu(self.spatial_conv(x)))
         x = self.temporal_conv(x)
         return x
 
@@ -293,14 +293,14 @@ class MiCTResNet(nn.Module):
         # out1 = self.relu(out1)
         # out1 = self.conv2_t(out1)
 
-        out1 = self.bn2(out1)
         out1 = self.relu(out1)
+        out1 = self.bn2(out1)
         out1 = self.maxpool2(out1)
 
         x, depth = _to_4d_tensor(x, depth_stride=4)
         out2 = self.conv1(x)
-        out2 = self.bn1(out2)
         out2 = self.relu(out2)
+        out2 = self.bn1(out2)
         out2 = self.maxpool1(out2)
         out2 = _to_5d_tensor(out2, depth)
         out = out1 + out2
@@ -379,8 +379,8 @@ class MiCTBlock(nn.Module):
         # out1 = self.relu(out1)
         # out1 = self.conv_t(out1)
 
-        out1 = self.bn(out1)
         out1 = self.relu(out1)
+        out1 = self.bn(out1)
 
         x, depth = _to_4d_tensor(x, depth_stride=self.stride[0])
         out2 = self.bottlenecks[0](x)
