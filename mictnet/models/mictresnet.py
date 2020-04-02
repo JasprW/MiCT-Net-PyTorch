@@ -17,10 +17,13 @@
 # MiCT: Mixed 3D/2D Convolutional Tube for Human Action Recognition
 # ==============================================================================
 
+import math
 import torch
 import torch.nn as nn
 import torch.utils.model_zoo as model_zoo
 from torch.nn import functional as F
+from torch.nn.modules.utils import _triple
+
 
 
 __all__ = ['MiCTResNet', 'MiCTBlock', 'get_mictresnet']
