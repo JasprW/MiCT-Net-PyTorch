@@ -230,13 +230,13 @@ class MiCTResNet(nn.Module):
         self.maxpool1 = nn.MaxPool2d(kernel_size=3,
                                      stride=2, padding=1)
 
-        # self.conv2 = nn.Conv3d(3, 64, kernel_size=(7, 7, 7),
-        #                        stride=(2, 2, 2),
-        #                        padding=0, bias=False)
+        self.conv2 = nn.Conv3d(3, 64, kernel_size=(7, 7, 7),
+                               stride=(2, 2, 2),
+                               padding=0, bias=False)
 
-        self.conv2 = SpatioTemporalConv(3, 64, kernel_size=[7, 7, 7], 
-                                        stride=[2, 2, 2], 
-                                        padding=3, bias=False)
+        # self.conv2 = SpatioTemporalConv(3, 64, kernel_size=[7, 7, 7], 
+        #                                 stride=[2, 2, 2], 
+        #                                 padding=3, bias=False)
         # self.conv2_s = nn.Conv3d(3, 64, kernel_size=(1, 7, 7),
         #                          stride=(1, 2, 2),
         #                          padding=0, bias=False)
