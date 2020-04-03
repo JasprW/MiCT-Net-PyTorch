@@ -187,7 +187,7 @@ class SpatioTemporalConv(nn.Module):
                                        stride=temporal_stride, padding=temporal_padding, bias=bias)
 
     def forward(self, x):
-        x = self.bn(self.relu(self.spatial_conv(x)))
+        x = self.relu(self.bn(self.spatial_conv(x)))
         x = self.temporal_conv(x)
         return x
 
@@ -296,14 +296,14 @@ class MiCTResNet(nn.Module):
         # out1 = self.relu(out1)
         # out1 = self.conv2_t(out1)
 
-        out1 = self.relu(out1)
         out1 = self.bn2(out1)
+        out1 = self.relu(out1)
         out1 = self.maxpool2(out1)
 
         x, depth = _to_4d_tensor(x, depth_stride=4)
         out2 = self.conv1(x)
-        out2 = self.relu(out2)
         out2 = self.bn1(out2)
+        out2 = self.relu(out2)
         out2 = self.maxpool1(out2)
         out2 = _to_5d_tensor(out2, depth)
         out = out1 + out2
@@ -368,22 +368,29 @@ class MiCTBlock(nn.Module):
         # self.conv_t = nn.Conv3d(planes, planes, kernel_size=(3, 1, 1),
         #                         stride=(self.stride[0], 1, 1),
         #                         padding=0, bias=False)
-        self.conv = SpatioTemporalConv(inplanes, planes, kernel_size=3, 
+        self.conv0 = nn.Conv3d(inplanes, inplanes / 2, kernel_size=1, stride=1, padding=0, bias=False)
+        self.bn0 = nn.BatchNorm3d(inplanes / 2)
+        self.conv = SpatioTemporalConv(inplanes / 2, planes, kernel_size=3, 
                                        stride=[self.stride[0], self.stride[1], self.stride[1]], 
                                        padding=0, bias=False)
         self.bn = nn.BatchNorm3d(planes)
         self.relu = nn.ReLU(inplace=True)
 
     def forward(self, x):
+        residual = x
         out1 = F.pad(x, (1, 1, 1, 1, 0, 2), 'constant', 0)
+        out1 = self.conv0(out1)
+        out1 = self.bn0(out1)
+        out1 = self.relu(out1)
+
         out1 = self.conv(out1)
         # out1 = self.conv_s(out1)
         # out1 = self.bn(out1)
         # out1 = self.relu(out1)
         # out1 = self.conv_t(out1)
 
-        out1 = self.relu(out1)
         out1 = self.bn(out1)
+        out1 = self.relu(out1)
 
         x, depth = _to_4d_tensor(x, depth_stride=self.stride[0])
         out2 = self.bottlenecks[0](x)
@@ -395,6 +402,8 @@ class MiCTBlock(nn.Module):
             out = self.bottlenecks[i](out)
         out = _to_5d_tensor(out, depth)
 
+        out += residual
+        out = self.relu(out)
         return out
 
 
