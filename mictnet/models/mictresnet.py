@@ -375,7 +375,7 @@ class MiCTBlock(nn.Module):
                                        padding=0, bias=False)
         self.bn = nn.BatchNorm3d(planes)
         self.relu = nn.ReLU(inplace=True)
-        self.conv_r = nn.Conv3d(inplanes, planes, kernel_size=1, stride=1, padding=1, bias=False)
+        # self.conv_r = nn.Conv3d(inplanes, planes, kernel_size=1, stride=1, padding=1, bias=False)
 
     def forward(self, x):
         residual = x
@@ -403,9 +403,9 @@ class MiCTBlock(nn.Module):
             out = self.bottlenecks[i](out)
         out = _to_5d_tensor(out, depth)
 
-        residual = self.conv_r(residual)
-        out += residual
-        out = self.relu(out)
+        # residual = self.conv_r(residual)
+        # out += residual
+        # out = self.relu(out)
         return out
 
 
