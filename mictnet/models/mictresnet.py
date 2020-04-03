@@ -368,9 +368,9 @@ class MiCTBlock(nn.Module):
         # self.conv_t = nn.Conv3d(planes, planes, kernel_size=(3, 1, 1),
         #                         stride=(self.stride[0], 1, 1),
         #                         padding=0, bias=False)
-        self.conv0 = nn.Conv3d(inplanes, inplanes / 2, kernel_size=1, stride=1, padding=0, bias=False)
-        self.bn0 = nn.BatchNorm3d(inplanes / 2)
-        self.conv = SpatioTemporalConv(inplanes / 2, planes, kernel_size=3, 
+        self.conv0 = nn.Conv3d(inplanes, inplanes // 2, kernel_size=1, stride=1, padding=0, bias=False)
+        self.bn0 = nn.BatchNorm3d(inplanes // 2)
+        self.conv = SpatioTemporalConv(inplanes // 2, planes, kernel_size=3, 
                                        stride=[self.stride[0], self.stride[1], self.stride[1]], 
                                        padding=0, bias=False)
         self.bn = nn.BatchNorm3d(planes)
