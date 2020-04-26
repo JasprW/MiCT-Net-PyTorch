@@ -145,6 +145,8 @@ class Trainer:
         top5 = utils.AverageMeter('acc@5', ':6.2f')
         tbar = tqdm(self.trainloader)
 
+        accumulation_steps = 4
+
         for i, (video, target) in enumerate(tbar):
             video = video.to(self.device)
             target = target.to(self.device)
@@ -152,8 +154,12 @@ class Trainer:
             self.optimizer.zero_grad()
             pred = self.model(video)
             loss = self.criterion(pred, target)
+            loss = loss / accumulation_steps
             loss.backward()
-            self.optimizer.step()
+
+            if((i + 1) % accumulation_steps) == 0:
+                self.optimizer.step()
+                self.optimizer.zero_grad()
 
             acc1, acc5 = utils.accuracy(pred, target, topk=(1, 5))
             top1.update(acc1[0], args.batch_size)

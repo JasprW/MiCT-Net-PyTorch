@@ -231,7 +231,7 @@ class MiCTResNet(nn.Module):
                                      stride=2, padding=1)
 
         self.conv2 = nn.Conv3d(3, 64, kernel_size=(7, 7, 7),
-                               stride=(2, 2, 2),
+                               stride=(1, 2, 2),
                                padding=0, bias=False)
 
         # self.conv2 = SpatioTemporalConv(3, 64, kernel_size=[7, 7, 7], 
@@ -300,7 +300,7 @@ class MiCTResNet(nn.Module):
         out1 = self.relu(out1)
         out1 = self.maxpool2(out1)
 
-        x, depth = _to_4d_tensor(x, depth_stride=4)
+        x, depth = _to_4d_tensor(x, depth_stride=2)
         out2 = self.conv1(x)
         out2 = self.bn1(out2)
         out2 = self.relu(out2)
